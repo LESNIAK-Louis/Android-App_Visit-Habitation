@@ -1,0 +1,28 @@
+@startuml
+enum Orientation{
+NORD
+SUD
+EST
+OUEST
+}
+
+class Coords{
+
+}
+
+class Photo{
+- unsigned int id
+}
+class Room{}
+class Access{}
+class Habitation{}
+class Project{}
+
+Photo --"1" Orientation
+Access "*"-- Photo
+Room --"1" Access
+Room --"4" Photo
+Habitation --"*" Room
+Project --"*" Habitation
+
+@enduml
