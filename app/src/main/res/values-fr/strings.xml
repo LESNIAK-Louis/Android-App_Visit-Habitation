@@ -1,19 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ProjetDevMobile</string>
     <string name="title_activity_room">RoomActivity</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="Habitations">Habitations</string>
-    <string name="newHabitation">New Habitation</string>
-    <string name="Rooms">Rooms</string>
-    <string name="newRoom">New Room</string>
-    <string name="seeGraph">Display Graph</string>
-    <string name="visit">Visit the habitation</string>
-    <string name="habitationName">Name of the Habitation</string>
+    <string name="newHabitation">Nouvelle Habitation</string>
+    <string name="Rooms">Pièces</string>
+    <string name="newRoom">Nouvelle pièce</string>
+    <string name="seeGraph">Afficher le Graph</string>
+    <string name="visit">Visiter l\'habitation</string>
+    <string name="habitationName">Nom de l\'habitation</string>
 </resources>

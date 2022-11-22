@@ -1,4 +1,4 @@
-package com.example.projetdevmobile.projetdevmobile;
+package com.example.projetdevmobile.projetdevmobile.Enumeration;
 
 public enum Orientation{
 

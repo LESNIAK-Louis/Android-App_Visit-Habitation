@@ -2,6 +2,7 @@ package com.example.projetdevmobile.projetdevmobile;
 
 import android.media.Image;
 
+import com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation;
 import com.example.projetdevmobile.tools.Coords;
 
 import java.util.ArrayList;

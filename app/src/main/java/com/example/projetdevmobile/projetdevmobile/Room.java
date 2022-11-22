@@ -1,14 +1,28 @@
 package com.example.projetdevmobile.projetdevmobile;
+import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
+import com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation;
 import com.example.projetdevmobile.tools.IdMaker;
 
 import java.util.HashMap;
 
-public class Room {
+public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
+    private String name;
     private int id;
 
-    public Room(){
+    public Room(String name){
         id = IdMaker.getInstance().getId();
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public ObjectType getType() {
+        return ObjectType.ROOM;
     }
 
     public int getId() {
