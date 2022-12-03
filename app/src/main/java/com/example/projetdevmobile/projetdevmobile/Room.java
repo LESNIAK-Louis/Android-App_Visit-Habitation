@@ -7,12 +7,14 @@ import java.util.HashMap;
 
 public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
+    private Habitation habitation;
     private String name;
     private int id;
 
-    public Room(String name){
-        id = IdMaker.getInstance().getId();
+    public Room(String name, Habitation habitation, int id){
         this.name = name;
+        this.habitation = habitation;
+        this.id = id;
     }
 
     @Override
@@ -33,11 +35,16 @@ public class Room implements ObjectRecycler {
         this.id = id;
     }
 
+
     public Photo getPhoto(Orientation o) {
         if(photos != null && o != null) {
             photos.get(o);
         }
         return null;
+    }
+
+    public String getHabitationName(){
+        return habitation.getName();
     }
 
     public void setPhoto(Photo photo){

@@ -1,5 +1,6 @@
 package com.example.projetdevmobile.projetdevmobileIG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projetdevmobile.R;
+import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
 import com.example.projetdevmobile.projetdevmobile.Habitation;
 import com.example.projetdevmobile.projetdevmobile.HabitationManager;
 import com.example.projetdevmobile.projetdevmobile.ObjectRecycler;
@@ -31,6 +33,12 @@ public class HabitationManagerActivity extends AppCompatActivity {
 
 
         displayHabitations();
+    }
+
+    public void onNewHab(android.view.View v){
+        Intent intent = new Intent(this, HabitationActivity.class);
+        intent.putExtra("isCreation",true);
+        startActivity(intent);
     }
 
     @Override

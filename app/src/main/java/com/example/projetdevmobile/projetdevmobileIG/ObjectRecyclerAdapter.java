@@ -12,6 +12,7 @@ import com.example.projetdevmobile.R;
 import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
 import com.example.projetdevmobile.projetdevmobile.Habitation;
 import com.example.projetdevmobile.projetdevmobile.ObjectRecycler;
+import com.example.projetdevmobile.projetdevmobile.Room;
 
 import java.util.List;
 
@@ -35,9 +36,13 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         ObjectRecycler object = modelList.get(position);
         holder.nameObject.setText(object.getName());
         holder.itemView.setOnClickListener(l->{
-            Intent intent = new Intent(inflater.getContext(), object.getType().equals(ObjectType.HABITATION)?HabitationActivity.class:Habitation.class); // Get real type of ObjectRecycler to start the correct Activity
+            Intent intent = new Intent(inflater.getContext(), object.getType().equals(ObjectType.HABITATION)?HabitationActivity.class:RoomActivity.class); // Get real type of ObjectRecycler to start the correct Activity
             intent.putExtra("isCreation",false);
             intent.putExtra("ObjectRecyclerName", object.getName());
+
+            if(object.getType().equals(ObjectType.ROOM))
+                intent.putExtra("ObjectRecyclerParentName", ((Room)object).getHabitationName());
+
             inflater.getContext().startActivity(intent);
         });
     }

@@ -40,6 +40,7 @@ public class Photo {
     public void setCoords(Coords coords) {
         this.coords = coords;
     }
+
     public void addAccess(Access a){
         this.access.add(a);
     }

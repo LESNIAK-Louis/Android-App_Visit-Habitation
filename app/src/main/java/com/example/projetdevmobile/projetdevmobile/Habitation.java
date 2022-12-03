@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public class Habitation implements ObjectRecycler {
     private String name;
-    private ArrayList<ObjectRecycler> rooms;
+    private RoomManager roomManager;
 
     public Habitation(String name){
-        rooms = new ArrayList<>();
+        roomManager = new RoomManager();
         this.name = name;
     }
 
@@ -23,19 +23,19 @@ public class Habitation implements ObjectRecycler {
         return ObjectType.HABITATION;
     }
 
-    public ArrayList<ObjectRecycler> getRooms(){
-        return rooms;
+    public RoomManager getRoomManager(){
+        return roomManager;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void addRoom(Room r){
-        this.rooms.add(r);
+    public void addRoom(String name){
+        roomManager.addRoom(name, this);
     }
 
     public void removeRoom(Room r){
-        this.rooms.remove(r);
+        roomManager.removeRoom(r);
     }
 }

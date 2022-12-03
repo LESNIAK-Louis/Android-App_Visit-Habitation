@@ -2,20 +2,11 @@ package com.example.projetdevmobile.tools;
 
 public class IdMaker {
     private int id;
-    private static IdMaker instance = new IdMaker();
-
-    /**
-     * Getter of class instance
-     * @return instance
-     */
-    public static IdMaker getInstance() {
-        return instance;
-    }
 
     /**
      * Private constructor
      */
-    private IdMaker(){
+    public IdMaker(){
         this.id = 0;
     }
 
@@ -26,6 +17,13 @@ public class IdMaker {
     public int getId(){
 
         return id++;
+    }
+
+    /**
+     * Remove 1 from the counter
+     */
+    public void decId(){
+        id--;
     }
 
     /**

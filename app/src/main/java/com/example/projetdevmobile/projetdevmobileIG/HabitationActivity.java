@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.projetdevmobile.R;
 import com.example.projetdevmobile.projetdevmobile.Habitation;
 import com.example.projetdevmobile.projetdevmobile.HabitationManager;
+import com.example.projetdevmobile.projetdevmobile.Room;
 
 public class HabitationActivity extends AppCompatActivity {
 
@@ -32,33 +33,70 @@ public class HabitationActivity extends AppCompatActivity {
 
         habNameText = (EditText) findViewById(R.id.habitationName);
         recyclerRoom = (RecyclerView) findViewById(R.id.recyclerRoom);
+        manager = HabitationManager.getInstance();
 
         Intent myIntent = getIntent();
         Boolean isCreation = myIntent.getBooleanExtra("isCreation", true);
 
-        if(!isCreation) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // Hide keyboard
-
-            String nameOfHab = myIntent.getStringExtra("ObjectRecyclerName");
-
-            manager = HabitationManager.getInstance();
-            this.habitation = manager.getHabitation(nameOfHab);
-
-            if (habitation != null) {
-                habNameText.setText(habitation.getName());
-                displayRooms();
-            }
-        }
-        else{
-            if(habNameText.requestFocus()) { // request focus on EditText, display keyboard
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            }
-        }
+        if(!isCreation)
+            unFocusAndDisplay(myIntent);
+        else
+            focusAndCreate();
 
         // Display keyboard when focused
         habNameText.setShowSoftInputOnFocus(true);
 
         // Handle entry in EditText
+        onKeyListenerHabName();
+        displayRooms();
+    }
+
+    public void onNewRoom(android.view.View v){
+        Intent intent = new Intent(this, RoomActivity.class);
+        intent.putExtra("isCreation",true);
+        intent.putExtra("ObjectRecyclerParentName", habitation.getName());
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayRooms();
+    }
+
+    private void unFocusAndDisplay(Intent myIntent){
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // Hide keyboard
+
+        String nameOfHab = myIntent.getStringExtra("ObjectRecyclerName");
+
+        this.habitation = manager.getHabitation(nameOfHab);
+
+        if (habitation != null) {
+            habNameText.setText(habitation.getName());
+            displayRooms();
+        }
+    }
+
+    private void focusAndCreate(){
+        if(habNameText.requestFocus()) { // request focus on EditText, display keyboard
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+
+        habitation = new Habitation("Habitation");
+        if(!manager.availiableName(habitation, "Habitation"))
+        {
+            int i=1;
+            while(!manager.availiableName(habitation, "Habitation " + i)){
+                i++;
+             }
+            habitation.setName("Habitation " + i);
+        }
+
+        habNameText.setText(habitation.getName());
+        manager.addHabitation(habitation);
+    }
+
+    private void onKeyListenerHabName(){
         habNameText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
@@ -80,14 +118,8 @@ public class HabitationActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        displayRooms();
-    }
-
     private void displayRooms(){
-        recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRooms()));
+        recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRoomManager().getRooms()));
         recyclerRoom.setLayoutManager(new LinearLayoutManager(HabitationActivity.this));
     }
 
