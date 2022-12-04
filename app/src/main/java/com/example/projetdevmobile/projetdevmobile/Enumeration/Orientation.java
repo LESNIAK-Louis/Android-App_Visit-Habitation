@@ -2,10 +2,10 @@ package com.example.projetdevmobile.projetdevmobile.Enumeration;
 
 public enum Orientation{
 
-    NORTH("Bleu"),
-    SOUTH("Rouge"),
-    EAST("Vert"),
-    WEST("Jaune");
+    NORTH("North"),
+    SOUTH("South"),
+    EAST("East"),
+    WEST("West");
 
     private String nom;
 

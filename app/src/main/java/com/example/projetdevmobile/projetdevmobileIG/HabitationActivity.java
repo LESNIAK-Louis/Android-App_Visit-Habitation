@@ -4,11 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 import com.example.projetdevmobile.R;
 import com.example.projetdevmobile.projetdevmobile.Habitation;
 import com.example.projetdevmobile.projetdevmobile.HabitationManager;
-import com.example.projetdevmobile.projetdevmobile.Room;
 
 public class HabitationActivity extends AppCompatActivity {
 
@@ -29,7 +25,7 @@ public class HabitationActivity extends AppCompatActivity {
     private Habitation habitation;
     private EditText habNameText;
 
-    private String resultDialogText;
+    //private String resultDialogText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +36,7 @@ public class HabitationActivity extends AppCompatActivity {
         recyclerRoom = (RecyclerView) findViewById(R.id.recyclerRoom);
         manager = HabitationManager.getInstance();
 
-        resultDialogText = new String();
+        //resultDialogText = new String();
 
         Intent myIntent = getIntent();
         Boolean isCreation = myIntent.getBooleanExtra("isCreation", false);
@@ -59,7 +55,7 @@ public class HabitationActivity extends AppCompatActivity {
     }
 
     public void onNewRoom(android.view.View v){
-        habNameText.setText(habitation.getName()); // Unconfirmed name, put the original name back
+       /* habNameText.setText(habitation.getName()); // Unconfirmed name, put the original name back
 
         Intent intent = new Intent(this, RoomActivity.class);
 
@@ -96,7 +92,12 @@ public class HabitationActivity extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        builder.show();*/
+
+        Intent intent = new Intent(this, RoomActivity.class);
+        intent.putExtra("isCreation", true);
+        intent.putExtra("ObjectRecyclerParentName", habitation.getName());
+        startActivity(intent);
     }
 
     @Override
@@ -124,14 +125,14 @@ public class HabitationActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
-        habitation = new Habitation("Habitation");
-        if(!manager.availiableName(habitation, "Habitation"))
+        habitation = new Habitation(getResources().getString(R.string.habitation));
+        if(!manager.availiableName(habitation, getResources().getString(R.string.habitation)))
         {
             int i=1;
-            while(!manager.availiableName(habitation, "Habitation " + i)){
+            while(!manager.availiableName(habitation, getResources().getString(R.string.habitation) +" " + i)){
                 i++;
              }
-            habitation.setName("Habitation " + i);
+            habitation.setName(getResources().getString(R.string.habitation) + " " + i);
         }
 
         habNameText.setText(habitation.getName());
@@ -161,7 +162,7 @@ public class HabitationActivity extends AppCompatActivity {
     }
 
     private void displayRooms(){
-        recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRoomManager().getRooms()));
+        recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRooms()));
         recyclerRoom.setLayoutManager(new LinearLayoutManager(HabitationActivity.this));
     }
 

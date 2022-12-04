@@ -9,12 +9,11 @@ public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
     private Habitation habitation;
     private String name;
-    private int id;
 
-    public Room(String name, Habitation habitation, int id){
+    public Room(String name, Habitation habitation){
         this.name = name;
         this.habitation = habitation;
-        this.id = id;
+        photos = new HashMap<>();
     }
 
     @Override
@@ -27,24 +26,20 @@ public class Room implements ObjectRecycler {
         return ObjectType.ROOM;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
 
     public Photo getPhoto(Orientation o) {
         if(photos != null && o != null) {
-            photos.get(o);
+            return photos.get(o);
         }
         return null;
     }
 
     public String getHabitationName(){
         return habitation.getName();
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public void setPhoto(Photo photo){
@@ -58,9 +53,5 @@ public class Room implements ObjectRecycler {
                 return true;
         }
         return false;
-    }
-
-    public boolean equals(Room r){
-        return r.getId() == this.id;
     }
 }

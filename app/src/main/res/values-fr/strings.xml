@@ -15,4 +15,12 @@
     <string name="seeGraph">Afficher le Graph</string>
     <string name="visit">Visiter l\'habitation</string>
     <string name="habitationName">Nom de l\'habitation</string>
+    <string name="roomName">Nom de la pièce</string>
+    <string name="north">Nord</string>
+    <string name="south">Sud</string>
+    <string name="east">Est</string>
+    <string name="west">Ouest</string>
+    <string name="room">Pièce</string>
+    <string name="habitation">Habitation</string>
+    <string name="error">Erreur</string>
 </resources>

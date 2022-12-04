@@ -37,3 +37,4 @@ public class HabitationManager {
     public void removeHabitation(Habitation hab){ this.habitations.remove(hab); }
 
 }
+
