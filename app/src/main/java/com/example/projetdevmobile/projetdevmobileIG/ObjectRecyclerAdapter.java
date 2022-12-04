@@ -38,10 +38,11 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         holder.itemView.setOnClickListener(l->{
             Intent intent = new Intent(inflater.getContext(), object.getType().equals(ObjectType.HABITATION)?HabitationActivity.class:RoomActivity.class); // Get real type of ObjectRecycler to start the correct Activity
             intent.putExtra("isCreation",false);
-            intent.putExtra("ObjectRecyclerName", object.getName());
 
             if(object.getType().equals(ObjectType.ROOM))
                 intent.putExtra("ObjectRecyclerParentName", ((Room)object).getHabitationName());
+            else
+                intent.putExtra("ObjectRecyclerName", object.getName());
 
             inflater.getContext().startActivity(intent);
         });

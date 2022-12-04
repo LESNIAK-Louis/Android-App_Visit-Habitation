@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -26,6 +29,8 @@ public class HabitationActivity extends AppCompatActivity {
     private Habitation habitation;
     private EditText habNameText;
 
+    private String resultDialogText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +40,10 @@ public class HabitationActivity extends AppCompatActivity {
         recyclerRoom = (RecyclerView) findViewById(R.id.recyclerRoom);
         manager = HabitationManager.getInstance();
 
+        resultDialogText = new String();
+
         Intent myIntent = getIntent();
-        Boolean isCreation = myIntent.getBooleanExtra("isCreation", true);
+        Boolean isCreation = myIntent.getBooleanExtra("isCreation", false);
 
         if(!isCreation)
             unFocusAndDisplay(myIntent);
@@ -52,10 +59,44 @@ public class HabitationActivity extends AppCompatActivity {
     }
 
     public void onNewRoom(android.view.View v){
+        habNameText.setText(habitation.getName()); // Unconfirmed name, put the original name back
+
         Intent intent = new Intent(this, RoomActivity.class);
-        intent.putExtra("isCreation",true);
-        intent.putExtra("ObjectRecyclerParentName", habitation.getName());
-        startActivity(intent);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose a room name");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resultDialogText = input.getText().toString();
+                if(resultDialogText.contentEquals(""))
+                    onNewRoom(v);
+                else {
+                    intent.putExtra("isCreation", true);
+                    intent.putExtra("ObjectRecyclerName", resultDialogText);
+                    intent.putExtra("ObjectRecyclerParentName", habitation.getName());
+                    startActivity(intent);
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resultDialogText = "";
+                input.clearFocus();
+                habNameText.clearFocus();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); // Hide keyboard
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     @Override
@@ -66,6 +107,7 @@ public class HabitationActivity extends AppCompatActivity {
 
     private void unFocusAndDisplay(Intent myIntent){
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // Hide keyboard
+        habNameText.clearFocus();
 
         String nameOfHab = myIntent.getStringExtra("ObjectRecyclerName");
 
@@ -79,7 +121,7 @@ public class HabitationActivity extends AppCompatActivity {
 
     private void focusAndCreate(){
         if(habNameText.requestFocus()) { // request focus on EditText, display keyboard
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
         habitation = new Habitation("Habitation");
@@ -127,4 +169,5 @@ public class HabitationActivity extends AppCompatActivity {
         InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
     }
+
 }
