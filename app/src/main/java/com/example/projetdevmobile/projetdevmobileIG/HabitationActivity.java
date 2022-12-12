@@ -192,7 +192,7 @@ public class HabitationActivity extends AppCompatActivity {
 
                     if(habName.contentEquals("") || !manager.availiableName(habitation, habName))
                     {
-                        Toast.makeText(HabitationActivity.this, getResources().getString(R.string.entry_room), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HabitationActivity.this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                         habNameText.setText(habitation.getName());
                     }
                     else{
