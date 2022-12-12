@@ -71,6 +71,10 @@ public class HabitationActivity extends AppCompatActivity {
         displayRooms();
     }
 
+    /**
+     * Button new room
+     * @param v
+     */
     public void onNewRoom(android.view.View v){
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra("isCreation", true);
@@ -78,11 +82,18 @@ public class HabitationActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Check if there is at least one room to enable the button
+     */
     public void disableButtonEntrance(){
         if(habitation.getRooms().size() == 0)
              defineEntrance.setEnabled(false);
     }
 
+    /**
+     * AlertBox to define the entrance
+     * @param v
+     */
     public void defineEntrance(android.view.View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(HabitationActivity.this);
         builder.setTitle(getResources().getString(R.string.entry_room));
@@ -121,6 +132,9 @@ public class HabitationActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * When resume
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -128,6 +142,9 @@ public class HabitationActivity extends AppCompatActivity {
         saveJson(this);
     }
 
+    /**
+     * Unfocus EditText and display informations
+     */
     private void unFocusAndDisplay(Intent myIntent){
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // Hide keyboard
         habNameText.clearFocus();
@@ -142,6 +159,9 @@ public class HabitationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Focus EditText and create the habitation
+     */
     private void focusAndCreate(){
         if(habNameText.requestFocus()) { // request focus on EditText, display keyboard
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -161,6 +181,9 @@ public class HabitationActivity extends AppCompatActivity {
         manager.addHabitation(habitation);
     }
 
+    /**
+     * onKeyListener for the EditText
+     */
     private void onKeyListenerHabName(){
         habNameText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -183,6 +206,9 @@ public class HabitationActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Display rooms of the habitation
+     */
     private void displayRooms(){
         recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRooms()));
         recyclerRoom.setLayoutManager(new LinearLayoutManager(HabitationActivity.this));
@@ -192,6 +218,10 @@ public class HabitationActivity extends AppCompatActivity {
             defineEntrance.setEnabled(false);
     }
 
+    /**
+     * Hide keyboard showed by EditText
+     * @param v
+     */
     private void hideKeyboard(View v){
         InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);

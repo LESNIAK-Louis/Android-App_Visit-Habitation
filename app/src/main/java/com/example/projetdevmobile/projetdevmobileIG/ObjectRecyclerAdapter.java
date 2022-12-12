@@ -56,6 +56,8 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
     public void onBindViewHolder(ObjectViewHolder holder, int position) {
         ObjectRecycler object = modelList.get(position);
 
+        /* Associate correct icons depending of the status of the object */
+
         holder.image4.setImageResource(R.drawable.trash);
 
         if(object.getType().equals(ObjectType.ROOM)) {
@@ -99,6 +101,8 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
             });
         }
 
+
+        // Good dimensions
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(75, 75);
         holder.image1.setLayoutParams(layoutParams);
         holder.image2.setLayoutParams(layoutParams);
@@ -106,6 +110,8 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         holder.image4.setLayoutParams(layoutParams);
 
         holder.nameObject.setText(object.getName());
+
+        /* Listener on click item */
 
         holder.itemView.setOnClickListener(l->{
             Intent intent = new Intent(inflater.getContext(), object.getType().equals(ObjectType.HABITATION)?HabitationActivity.class:RoomActivity.class); // Get real type of ObjectRecycler to start the correct Activity
@@ -119,6 +125,10 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         });
     }
 
+    /**
+     * Display an alert for confirmation when attemping to delete  an ObjectRecycler
+     * @param object
+     */
     private void alertDeletion(ObjectRecycler object){
         AlertDialog.Builder builder = new AlertDialog.Builder(inflater.getContext());
         builder.setTitle(inflater.getContext().getResources().getString(R.string.delete) + object.getName() + " ?");
@@ -156,6 +166,10 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         dialog.show();
     }
 
+    /**
+     * Delete a room properly
+     * @param object
+     */
     private void deleteRoom(ObjectRecycler object){
         HabitationManager hm = HabitationManager.getInstance();
         Habitation hab = hm.getHabitation(((Room)object).getHabitationName());
@@ -194,6 +208,10 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         });
     }
 
+    /**
+     * Get number of items in RecyclerView
+     * @return
+     */
     @Override
     public int getItemCount() {
         return modelList.size();
@@ -206,6 +224,9 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
     }
 
 
+    /**
+     * Item layout
+     */
     class ObjectViewHolder extends RecyclerView.ViewHolder {
         TextView nameObject;
         ImageView image1;

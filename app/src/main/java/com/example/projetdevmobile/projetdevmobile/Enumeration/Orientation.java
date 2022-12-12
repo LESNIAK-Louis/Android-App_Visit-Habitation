@@ -1,5 +1,8 @@
 package com.example.projetdevmobile.projetdevmobile.Enumeration;
 
+/**
+ * Enum of dertermining the orientation of a picture
+ */
 public enum Orientation{
 
     NORTH("North"),
@@ -7,18 +10,31 @@ public enum Orientation{
     EAST("East"),
     WEST("West");
 
-    private String nom;
+    private String orientation;
 
-    private Orientation(String nom)
+    /**
+     * Private constructor
+     * @param orientation
+     */
+    private Orientation(String orientation)
     {
-        this.nom = nom;
+        this.orientation = orientation;
     }
 
+    /**
+     * Getter of orientation
+     * @return nom
+     */
     public String getOrientation()
     {
-        return this.nom;
+        return this.orientation;
     }
 
+    /**
+     * Return actual orientation + 90 degrees
+     * @param o actual orientation
+     * @return
+     */
     public static Orientation getRight(Orientation o){
         switch (o){
             case NORTH:
@@ -33,6 +49,11 @@ public enum Orientation{
         return NORTH;
     }
 
+    /**
+     * Return actual orientation - 90 degrees
+     * @param o actual orientation
+     * @return
+     */
     public static  Orientation getLeft(Orientation o){
         switch (o){
             case NORTH:
@@ -47,6 +68,11 @@ public enum Orientation{
         return NORTH;
     }
 
+    /**
+     * Getter of an Orientation object from a string
+     * @param o orientation in string
+     * @return orientation converted
+     */
     public static Orientation getOrientation(String o){
         Orientation orientation;
         if(o.contentEquals("North"))
@@ -61,8 +87,12 @@ public enum Orientation{
         return orientation;
     }
 
+    /**
+     * toString
+     * @return string
+     */
     public String toString()
     {
-        return this.nom;
+        return this.orientation;
     }
 }

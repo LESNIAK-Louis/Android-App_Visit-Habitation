@@ -1,28 +1,111 @@
 @startuml
+package tools{
+class IdMaker{
+- {static} IdMaker instance = new IdMaker();
+--
+{static} IdMaker getInstance()
+int getId()
+String getUIdImg()
+}
+
+class Static {
+{static} void saveJson(Context ctx)
+{static} boolean openJson(Context ctx)
+{static} String getFileContent(FileInputStream fis)
+{static} Bitmap handleSamplingAndRotationBitmap(Context context, Uri selectedImage)
+{static} int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+{static} Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage)
+{static} Bitmap rotateImage(Bitmap img, int degree)
+}
+}
+
+package Enumeration{
 enum Orientation{
 NORD
 SUD
 EST
 OUEST
+--
+{static} Orientation getRight(Orientation o)
+{static} Orientation getLeft(Orientation o)
+{static} Orientation getOrientation(String o)
 }
 
-class Coords{
+enum ObjectType{
+ROOM
+HABITATION
+}
+}
 
+interface ObjectRecycler{
+{abstract} String getName()
+{abstract} ObjectType getType()
+}
+
+class HabitationManager{
+- {static} HabitationManager instance = new HabitationManager()
+--
+{static} HabitationManager getInstance()
+boolean availiableName(Habitation habitation, String name)
+void addHabitation(Habitation hab)
+void removeHabitation(Habitation hab)
+JSONObject toJson()
+}
+
+class Habitation implements ObjectRecycler {
+- String name
+Habitation(String name)
+Room getRoomEntrance()
+void setRoomEntrance(Room roomEntrance)
+ArrayList<ObjectRecycler> getRooms()
+ObjectType getType()
+void addRoom(Room room)
+void removeRoom(Room room)
+boolean isCorrect()
+boolean availiableRoomName(Room room, String name)
+JSONObject toJson()
+}
+
+class Room implements ObjectRecycler {
+- String habitationName
+- String name
+Room(String name, String habitationName)
+HashMap<Orientation, Photo> getPhotos()
+ObjectType getType()
+boolean isCorrect()
+JSONObject toJson()
 }
 
 class Photo{
-- unsigned int id
+- Uri imgName
+Photo()
+Photo(Orientation orientation, Uri imgName)
+boolean checkIntersect(Rect rect)
+Bitmap getImageBitmap(Context context)
+void addAccess(Access a)
+void removeAccess(Access a)
+boolean equals(Photo photo)
+JSONObject toJson()
 }
-class Room{}
-class Access{}
-class Habitation{}
-class Project{}
+
+class Access{
+- Rect rect
+boolean equals(Access a)
+JSONObject toJson()
+}
+
+package projetdevmobileIG{
+class UserInterface{}
+}
+
 
 Photo --"1" Orientation
-Access "*"-- Photo
+Access "*"- Photo
 Room --"1" Access
-Room --"4" Photo
-Habitation --"*" Room
-Project --"*" Habitation
+Room -"4" Photo
+Habitation -"*" Room
+Habitation -"1" Room
+HabitationManager -"*" Habitation
+HabitationManager "1"-- UserInterface
 
 @enduml

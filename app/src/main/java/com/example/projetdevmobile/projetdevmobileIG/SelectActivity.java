@@ -97,6 +97,10 @@ public class SelectActivity extends AppCompatActivity {
         selectionRectangle.configSurfaceView(imageView);
     }
 
+    /**
+     * A
+     * @param rect
+     */
     private void assignRoom(Rect rect)
     {
         if(habitation.getRooms().size() == 1) {
@@ -112,15 +116,11 @@ public class SelectActivity extends AppCompatActivity {
         }
     }
 
-    private void checkBounds(Point p){
-        if(p.x < 0) p.x = 0;
-        if(p.x > imageView.getWidth()) p.x = imageView.getWidth();
 
-        if(p.y < 0) p.y = 0;
-        if(p.y >  imageView.getHeight()) p.y =  imageView.getHeight();
-    }
-
-
+    /**
+     * Update rectSelection with good values (in bounds of imageview)
+     * @param motionEvent
+     */
     private void modifyRect(MotionEvent motionEvent){
         Point p1 = new Point((int) motionEvent.getX(0), (int) motionEvent.getY(0));
         Point p2 = new Point((int) motionEvent.getX(motionEvent.getPointerCount() - 1), (int) motionEvent.getY(motionEvent.getPointerCount() - 1));
@@ -131,6 +131,24 @@ public class SelectActivity extends AppCompatActivity {
         rectSelection = new Rect(p1.x, p1.y, p2.x, p2.y);
     }
 
+    /**
+     * Checks if the point position is in bounds of the ImageView
+     * @param p
+     */
+    private void checkBounds(Point p){
+        if(p.x < 0) p.x = 0;
+        if(p.x > imageView.getWidth()) p.x = imageView.getWidth();
+
+        if(p.y < 0) p.y = 0;
+        if(p.y >  imageView.getHeight()) p.y =  imageView.getHeight();
+    }
+
+    /**
+     *
+     * AlertBox to modify, delete or create an access
+     * @param a
+     * @param rect
+     */
     private void modifyAccess(Access a, Rect rect){
         AlertDialog.Builder builder = new AlertDialog.Builder(SelectActivity.this);
         builder.setTitle(getResources().getString(R.string.choose_room));
@@ -151,7 +169,7 @@ public class SelectActivity extends AppCompatActivity {
                 selectedRoom = which;
             }
         });
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(a == null && rect != null) // Creation
@@ -198,17 +216,23 @@ public class SelectActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * Add access rect to the SurfaceView
+     */
     private void getAccessRects(){
         selectedRects.clear();
         for(Access a : photo.getAccess())
             selectedRects.add(a.getRect());
     }
 
+    /**
+     * Touch listener of the imageview
+     */
     class OnTouchEvent implements ImageView.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_DOWN: // Click on an access -> modify
                     if (motionEvent.getPointerCount() == 1) {
                         for (Access a : photo.getAccess()){
                             Rect r = a.getRect();
@@ -223,14 +247,14 @@ public class SelectActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                    else if  (motionEvent.getPointerCount() == 2) {
+                    else if  (motionEvent.getPointerCount() == 2) { // Start of a selection
                         modifyRect(motionEvent);
                         rectSelection.sort();
                         selectionRectangle.setRect(rectSelection);
                         selectionRectangle.invalidate();
                         return true;
                     }
-                case MotionEvent.ACTION_MOVE:
+                case MotionEvent.ACTION_MOVE: // Moving selection
                     if (motionEvent.getPointerCount() == 2) {
                         modifyRect(motionEvent);
                         rectSelection.sort();
@@ -238,7 +262,7 @@ public class SelectActivity extends AppCompatActivity {
                         selectionRectangle.invalidate();
                         return true;
                     }
-                case MotionEvent.ACTION_POINTER_UP:
+                case MotionEvent.ACTION_POINTER_UP: // Finish selection -> create
                     if  (motionEvent.getPointerCount() == 2) {
                         assignRoom(selectionRectangle.saveSelected());
                         return true;
@@ -248,6 +272,9 @@ public class SelectActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * When resumed
+     */
     @Override
     protected void onResume() {
         super.onResume();

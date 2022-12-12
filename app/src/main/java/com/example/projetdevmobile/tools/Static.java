@@ -41,6 +41,10 @@ public class Static {
 
     /* JSON SAVE */
 
+    /**
+     * Save all objects to json on disk
+     * @param ctx
+     */
     public static  void saveJson(Context ctx) {
         HabitationManager hm = HabitationManager.getInstance();
         try {
@@ -59,6 +63,11 @@ public class Static {
     }
 
 
+    /**
+     * open the json on disk and initialize objects from it
+     * @param ctx
+     * @return false if no file found
+     */
     public static boolean openJson(Context ctx){
         HabitationManager hm = HabitationManager.getInstance();
 
@@ -186,6 +195,13 @@ public class Static {
 
     /* Pictures */
 
+    /**
+     * Apply a scaling and a rotation to the bitmap associated to the uri if necessary
+     * @param context
+     * @param selectedImage uri of the picture
+     * @return bitmap of selectedImage corrected
+     * @throws IOException
+     */
     public static Bitmap handleSamplingAndRotationBitmap(Context context, Uri selectedImage) throws IOException {
         int MAX_HEIGHT = 1024;
         int MAX_WIDTH = 1024;
@@ -206,6 +222,13 @@ public class Static {
         return img;
     }
 
+    /**
+     * Calculate the scaling coefficient to apply to the bitmap
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return
+     */
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -229,6 +252,14 @@ public class Static {
         return inSampleSize;
     }
 
+    /**
+     * Look if a rotation of the bitmap is required using Exif informations
+     * @param context
+     * @param img
+     * @param selectedImage
+     * @return
+     * @throws IOException
+     */
     private static Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage) throws IOException {
 
         InputStream input = context.getContentResolver().openInputStream(selectedImage);
@@ -249,6 +280,12 @@ public class Static {
         }
     }
 
+    /**
+     * Rotate the bitmap
+     * @param img
+     * @param degree
+     * @return
+     */
     private static Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);

@@ -30,6 +30,11 @@ public class SelectionRectangle extends SurfaceView {
     private Rect rect;
     private ImageView viewOfImage;
 
+    /**
+     * Constructor
+     * @param context
+     * @param attrs
+     */
     public SelectionRectangle(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.getHolder().setFormat(PixelFormat.TRANSPARENT);
@@ -43,6 +48,10 @@ public class SelectionRectangle extends SurfaceView {
         this.paint.setStyle(Paint.Style.STROKE);
     }
 
+    /**
+     * Config the surfaceview
+     * @param viewOfImage
+     */
     public void configSurfaceView(ImageView viewOfImage){
         this.viewOfImage = viewOfImage;
         this.viewOfImage.setDrawingCacheEnabled(true);
@@ -52,14 +61,26 @@ public class SelectionRectangle extends SurfaceView {
         this.setLayoutParams(layoutParams);
     }
 
+    /**
+     * Return selected rect
+     * @return
+     */
     public Rect saveSelected(){
         return rect;
     }
 
+    /**
+     * Setter of the rect
+     * @param rect
+     */
     public void setRect(Rect rect){
         this.rect = rect;
     }
 
+    /**
+     * Setter of selected rects corresponding to the accesses
+     * @param rects
+     */
     public void setSelectedRects(ArrayList<Rect> rects){
         this.selectedRects = rects;
     }
@@ -68,6 +89,7 @@ public class SelectionRectangle extends SurfaceView {
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
+        // Draw accesses rects
         if(selectedRects != null){
             paint.setColor(Color.RED);
             for(Rect r : selectedRects) {
@@ -76,11 +98,13 @@ public class SelectionRectangle extends SurfaceView {
                 }
             }
 
+        // Draw selection rect
         if(rect != null) {
             paint.setColor(Color.BLACK);
             canvas.drawRect(rect, paint);
         }
 
+        // Bring back surfaceview to front
         this.bringToFront();
     }
 }

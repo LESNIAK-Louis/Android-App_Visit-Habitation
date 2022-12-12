@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // If first time launching show tutorial
         if(openJson(this))
             startActivity(new Intent(this, HabitationManagerActivity.class));
     }

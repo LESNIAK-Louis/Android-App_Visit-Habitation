@@ -57,12 +57,19 @@ public class HabitationManagerActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Button new habitation
+     * @param v
+     */
     public void onNewHab(android.view.View v){
         Intent intent = new Intent(this, HabitationActivity.class);
         intent.putExtra("isCreation",true);
         startActivity(intent);
     }
 
+    /**
+     * When resume
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,6 +77,9 @@ public class HabitationManagerActivity extends AppCompatActivity {
         saveJson(this);
     }
 
+    /**
+     * Display all habitation in the recycler view
+     */
     private void displayHabitations(){
         recyclerHab.setAdapter(new ObjectRecyclerAdapter(HabitationManagerActivity.this, manager.getHabitations()));
         recyclerHab.setLayoutManager(new LinearLayoutManager(HabitationManagerActivity.this));

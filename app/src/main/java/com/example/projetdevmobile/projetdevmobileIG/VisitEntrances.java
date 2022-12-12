@@ -53,7 +53,10 @@ public class VisitEntrances extends SurfaceView {
         this.setLayoutParams(layoutParams);
     }
 
-
+    /**
+     * Setter of the accesses
+     * @param accesses
+     */
     public void setEntrances(ArrayList<Access> accesses){
         this.accesses = accesses;
         invalidate();
@@ -66,10 +69,12 @@ public class VisitEntrances extends SurfaceView {
         if(accesses != null){
             for(Access a : accesses) {
                 if(a != null){
+                    // Access rect
                     Rect rect = a.getRect();
                     paint.setColor(Color.RED);
                     canvas.drawRect(rect, paint);
 
+                    // Room name
                     paint.setColor(Color.GREEN);
                     canvas.drawText(a.getRoom().getName(),rect.left + (rect.right - rect.left)/2 - textSize/2 ,rect.top + (rect.bottom - rect.top)/2 - textSize/2, paint);
                 }

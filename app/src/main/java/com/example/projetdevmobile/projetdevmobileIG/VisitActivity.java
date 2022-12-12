@@ -16,6 +16,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 
 import com.example.projetdevmobile.R;
@@ -58,19 +59,6 @@ public class VisitActivity extends AppCompatActivity {
         imageView.setOnTouchListener(listenerImageView);
     }
 
-    private Orientation getOrientation(String o){
-        Orientation orientation;
-        if(o.contentEquals("North"))
-            orientation = Orientation.NORTH;
-        else if (o.contentEquals("South"))
-            orientation = Orientation.SOUTH;
-        else if (o.contentEquals("West"))
-            orientation = Orientation.WEST;
-        else
-            orientation = Orientation.EAST;
-
-        return orientation;
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
@@ -78,6 +66,10 @@ public class VisitActivity extends AppCompatActivity {
         visitEntrances.configSurfaceView(imageView);
     }
 
+    /**
+     * Display the corresoponding picture in the room of access depending on actual orientation
+     * @param a
+     */
     private void moveNextRoom(Access a)
     {
         currentPhoto = a.getRoom().getPhoto(currentPhoto.getOrientation());
@@ -85,6 +77,9 @@ public class VisitActivity extends AppCompatActivity {
         loadPhoto();
     }
 
+    /**
+     * load photo to imageview
+     */
     private void loadPhoto(){
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -93,7 +88,9 @@ public class VisitActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * On touch listener of the imageview
+     */
     class OnTouchEvent implements ImageView.OnTouchListener {
 
         private float downX;
@@ -105,6 +102,7 @@ public class VisitActivity extends AppCompatActivity {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (motionEvent.getPointerCount() == 1) {
+                        boolean hitAccess = false;
                         for (Access a : currentPhoto.getAccess()) {
                             Rect r = a.getRect();
 
@@ -115,28 +113,33 @@ public class VisitActivity extends AppCompatActivity {
                             Point p2 = new Point(p1);
                             Rect point = new Rect(p1.x, p1.y, p2.x, p2.y);
 
-                            if (r != null && intersects(r, point)) {
+                            if (r != null && intersects(r, point)) { // If pointed access, move to next room
                                 moveNextRoom(a);
+                                hitAccess = true;
                             }
+                        }
+                        if(!hitAccess){ // If not pointed access, then start potential swiping
+                            swap = true;
+                            downX = motionEvent.getX();
                         }
                     }
                     break;
-                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP: // Not swiping anymore
                     swap = false;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (motionEvent.getPointerCount() == 1) {
                         float deltaX = motionEvent.getX() - downX;
-                        if (!swap && Math.abs(deltaX) > MIN_DIST) {
-                            swap = true;
-                            if (deltaX > 0) {
+                        if (swap && Math.abs(deltaX) > MIN_DIST) { // If swiping successful
+                            swap = false;
+                            if (deltaX > 0) { // Swipe left to right
                                 currentPhoto = currentRoom.getPhoto(Orientation.getLeft(currentPhoto.getOrientation()));
                                 loadPhoto();
-                                swap = false;
-                            } else {
+                                downX = motionEvent.getX();
+                            } else { // Swipe right to left
                                 currentPhoto = currentRoom.getPhoto(Orientation.getRight(currentPhoto.getOrientation()));
                                 loadPhoto();
-                                swap = false;
+                                downX = motionEvent.getX();
                             }
                         }
                     }
@@ -146,6 +149,9 @@ public class VisitActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * When resumes
+     */
     @Override
     protected void onResume() {
         super.onResume();

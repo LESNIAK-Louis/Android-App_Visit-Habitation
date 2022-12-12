@@ -122,6 +122,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
 
     /* UI SETUP */
 
+    /**
+     * Unfocus EditText and display informations
+     */
     private void unFocusAndDisplay(Intent myIntent){
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); // Hide keyboard
         roomNameText.clearFocus();
@@ -135,6 +138,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Focus EditText and create the room
+     */
     private void focusAndCreate(){
         if(roomNameText.requestFocus()) { // request focus on EditText, display keyboard
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -154,6 +160,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         habitation.addRoom(room);
     }
 
+    /**
+     * onKeyListener for the EditText
+     */
     private void onKeyListenerRoomName(){
         roomNameText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -176,6 +185,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
+    /**
+     * display all pictures associated with the room if existing
+     */
     private void displayPictures(){
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -193,11 +205,18 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
             imgSouth.setImageBitmap(room.getPhoto(Orientation.SOUTH).getImageBitmap(this));
     }
 
+    /**
+     * Hide keyboard
+     * @param v
+     */
     private void hideKeyboard(View v){
         InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(),0);
     }
 
+    /**
+     * When resume
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -209,26 +228,45 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
 
     /* PICTURES */
 
+    /**
+     * OnClick picture North
+     * @param v
+     */
     public void onClickNorth(android.view.View v){
         lastPictureOrientation = Orientation.NORTH;
         makeDecisionPicture();
     }
 
+    /**
+     * OnClick picture South
+     * @param v
+     */
     public void onClickSouth(android.view.View v){
         lastPictureOrientation = Orientation.SOUTH;
         makeDecisionPicture();
     }
 
+    /**
+     * OnClick picture East
+     * @param v
+     */
     public void onClickEast(android.view.View v){
         lastPictureOrientation = Orientation.EAST;
         makeDecisionPicture();
     }
 
+    /**
+     * OnClick picture West
+     * @param v
+     */
     public void onClickWest(android.view.View v){
         lastPictureOrientation = Orientation.WEST;
         makeDecisionPicture();
     }
 
+    /**
+     * AlertBox determining if we need to take a photo, enter in selection mode or cancel
+     */
     private void makeDecisionPicture(){
         if (room.getPhoto(lastPictureOrientation) == null){
             takePicture();
@@ -267,6 +305,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Initialize launcher for picture result when taken
+     */
     private void launcherInit(){
         launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -281,6 +322,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         );
     }
 
+    /**
+     * Take a picture, launches MediaStore.ACTION_IMAGE_CAPTURE
+     */
     private void takePicture() {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(pictureIntent.resolveActivity(getPackageManager()) != null){
@@ -296,6 +340,11 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Create a new image file on disk to save the result
+     * @return
+     * @throws IOException
+     */
     private File newImageFile() throws IOException {
         IdMaker idMaker = IdMaker.getInstance();
         String uniqueName = "image" + idMaker.getUIdImg();
@@ -310,6 +359,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         return image;
     }
 
+    /**
+     * Save image to the room object, delete the previous one if existing
+     */
     private void saveImage(){
 
         BitmapFactory.Options options = new BitmapFactory.Options();
