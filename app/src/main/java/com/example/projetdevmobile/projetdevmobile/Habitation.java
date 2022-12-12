@@ -1,6 +1,7 @@
 package com.example.projetdevmobile.projetdevmobile;
 
 import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
+import com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,16 @@ public class Habitation implements ObjectRecycler {
 
     public void removeRoom(Room room){
         this.rooms.remove(room);
+    }
+
+    public boolean isCorrect(){
+        if(rooms.size() == 0)
+            return false;
+        for(ObjectRecycler r : rooms){
+            if(!( ((Room)r).isCorrect() ))
+                return false;
+        }
+        return true;
     }
 
     public boolean availiableRoomName(Room room, String name){

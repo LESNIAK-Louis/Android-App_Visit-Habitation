@@ -1,7 +1,16 @@
 package com.example.projetdevmobile.projetdevmobile;
 
+import static com.example.projetdevmobile.tools.Static.handleSamplingAndRotationBitmap;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,19 +27,19 @@ public class Photo {
     private Orientation orientation;
     private ArrayList<Access> access;
     private Coords coords;
-    private String imgName;
+    private Uri imgName;
 
     public Photo(){
         access = new ArrayList<>();
     }
 
-    public Photo(Orientation orientation, String imgName){
+    public Photo(Orientation orientation, Uri imgName){
         this.orientation = orientation;
         this.imgName = imgName;
         access = new ArrayList<>();
     }
 
-    public Photo(Orientation orientation, Coords coord, String imgName){
+    public Photo(Orientation orientation, Coords coord, Uri imgName){
         this.orientation = orientation;
         this.imgName = imgName;
         this.coords = coord;
@@ -46,24 +55,32 @@ public class Photo {
     }
 
     public String getImage() {
-        return imgName;
+        return imgName.toString();
     }
 
-    public Bitmap getImageBitmap(File parent) {
-        Bitmap bm = null;
-            try {
-                InputStream fis = new FileInputStream(new File(parent,this.imgName));
-                if(fis != null) {
-                    bm = BitmapFactory.decodeStream(fis);
-                    fis.close();
-                }
-            } catch (FileNotFoundException e) {e.printStackTrace();}
-            catch (IOException e) {e.printStackTrace();}
-        return bm;
+    public ArrayList<Access> getAccess(){return access;}
+
+    public boolean checkIntersect(Rect rect){
+        for(Access a : access){
+            if(rect.intersect(a.getRect())){
+                return  true;
+            }
+        }
+        return false;
+    }
+
+    public Bitmap getImageBitmap(Context context) {
+        Bitmap imageBitmap = null;
+        try {
+            imageBitmap = handleSamplingAndRotationBitmap(context, imgName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageBitmap;
     }
 
 
-    public void setImage(String image) {
+    public void setImage(Uri image) {
         this.imgName = image;
     }
 

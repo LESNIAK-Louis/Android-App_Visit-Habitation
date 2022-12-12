@@ -9,11 +9,13 @@ public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
     private Habitation habitation;
     private String name;
+    private boolean start;
 
     public Room(String name, Habitation habitation){
         this.name = name;
         this.habitation = habitation;
         photos = new HashMap<>();
+        start = false;
     }
 
     @Override
@@ -26,6 +28,9 @@ public class Room implements ObjectRecycler {
         return ObjectType.ROOM;
     }
 
+    public boolean isStart() {
+        return start;
+    }
 
     public Photo getPhoto(Orientation o) {
         if(photos != null && o != null) {
@@ -38,6 +43,10 @@ public class Room implements ObjectRecycler {
         return habitation.getName();
     }
 
+    public void setStart(boolean start) {
+        this.start = start;
+    }
+
     public void setName(String name){
         this.name = name;
     }
@@ -45,6 +54,13 @@ public class Room implements ObjectRecycler {
     public void setPhoto(Photo photo){
         if(photo != null)
             photos.put(photo.getOrientation(), photo);
+    }
+
+    public boolean isCorrect(){
+        if(getPhoto(Orientation.NORTH) == null || getPhoto(Orientation.SOUTH) == null
+                || getPhoto(Orientation.EAST) == null || getPhoto(Orientation.WEST) == null)
+            return false;
+        return true;
     }
 
     public boolean isSet(Orientation o){

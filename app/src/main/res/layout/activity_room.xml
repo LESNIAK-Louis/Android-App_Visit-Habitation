@@ -173,6 +173,7 @@
                     android:layout_height="fill_parent"
                     android:layout_gravity="center|center_horizontal|center_vertical"
                     android:layout_weight="1"
+                    android:onClick="onClickEast"
                     app:srcCompat="@drawable/ic_launcher_background" />
 
             </LinearLayout>

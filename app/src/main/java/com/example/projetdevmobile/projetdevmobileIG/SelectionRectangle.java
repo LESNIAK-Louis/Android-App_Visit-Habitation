@@ -10,13 +10,20 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+
 public class SelectionRectangle extends SurfaceView {
 
     private Paint paint;
+    private ArrayList<Rect> selectedRects;
     private Rect rect;
     private ImageView viewOfImage;
 
@@ -35,28 +42,43 @@ public class SelectionRectangle extends SurfaceView {
 
     public void configSurfaceView(ImageView viewOfImage){
         this.viewOfImage = viewOfImage;
+        this.viewOfImage.setDrawingCacheEnabled(true);
         this.setX(viewOfImage.getX());
         this.setY(viewOfImage.getY());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(viewOfImage.getWidth(), viewOfImage.getHeight());
         this.setLayoutParams(layoutParams);
     }
 
-    public Bitmap saveSelected(){
-        viewOfImage.setDrawingCacheEnabled(true);
-        Bitmap bmap = viewOfImage.getDrawingCache();
-        return Bitmap.createBitmap(bmap, rect.left,rect.top,rect.right-rect.left, rect.bottom-rect.top);
+    public Rect saveSelected(){
+        return rect;
     }
 
     public void setRect(Rect rect){
         this.rect = rect;
     }
 
+    public void setSelectedRects(ArrayList<Rect> rect){
+        this.selectedRects = rect;
+    }
+
     @Override
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        if(rect != null) {
-            canvas.drawRect(rect, paint);
-            this.bringToFront();
+
+        if(selectedRects != null){
+            paint.setColor(Color.RED);
+            for(Rect r : selectedRects) {
+                if(r != null){
+                    canvas.drawRect(r, paint);
+                }
+            }
         }
+
+        if(rect != null) {
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(rect, paint);
+        }
+
+        this.bringToFront();
     }
 }

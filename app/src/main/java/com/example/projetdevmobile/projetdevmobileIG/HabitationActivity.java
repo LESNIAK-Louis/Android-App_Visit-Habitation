@@ -25,8 +25,6 @@ public class HabitationActivity extends AppCompatActivity {
     private Habitation habitation;
     private EditText habNameText;
 
-    //private String resultDialogText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +33,6 @@ public class HabitationActivity extends AppCompatActivity {
         habNameText = (EditText) findViewById(R.id.habitationName);
         recyclerRoom = (RecyclerView) findViewById(R.id.recyclerRoom);
         manager = HabitationManager.getInstance();
-
-        //resultDialogText = new String();
 
         Intent myIntent = getIntent();
         Boolean isCreation = myIntent.getBooleanExtra("isCreation", false);
@@ -55,45 +51,6 @@ public class HabitationActivity extends AppCompatActivity {
     }
 
     public void onNewRoom(android.view.View v){
-       /* habNameText.setText(habitation.getName()); // Unconfirmed name, put the original name back
-
-        Intent intent = new Intent(this, RoomActivity.class);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose a room name");
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resultDialogText = input.getText().toString();
-                if(resultDialogText.contentEquals(""))
-                    onNewRoom(v);
-                else {
-                    intent.putExtra("isCreation", true);
-                    intent.putExtra("ObjectRecyclerName", resultDialogText);
-                    intent.putExtra("ObjectRecyclerParentName", habitation.getName());
-                    startActivity(intent);
-                }
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                resultDialogText = "";
-                input.clearFocus();
-                habNameText.clearFocus();
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); // Hide keyboard
-                dialog.cancel();
-            }
-        });
-
-        builder.show();*/
-
         Intent intent = new Intent(this, RoomActivity.class);
         intent.putExtra("isCreation", true);
         intent.putExtra("ObjectRecyclerParentName", habitation.getName());
