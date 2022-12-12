@@ -7,13 +7,13 @@ import java.util.HashMap;
 
 public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
-    private Habitation habitation;
+    private String  habitationName;
     private String name;
     private boolean start;
 
-    public Room(String name, Habitation habitation){
+    public Room(String name, String habitationName){
         this.name = name;
-        this.habitation = habitation;
+        this.habitationName = habitationName;
         photos = new HashMap<>();
         start = false;
     }
@@ -40,7 +40,11 @@ public class Room implements ObjectRecycler {
     }
 
     public String getHabitationName(){
-        return habitation.getName();
+        return habitationName;
+    }
+
+    public HashMap<Orientation, Photo> getPhotos() {
+        return photos;
     }
 
     public void setStart(boolean start) {
@@ -49,6 +53,10 @@ public class Room implements ObjectRecycler {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public void setHabitationName(String habitationName) {
+        this.habitationName = habitationName;
     }
 
     public void setPhoto(Photo photo){

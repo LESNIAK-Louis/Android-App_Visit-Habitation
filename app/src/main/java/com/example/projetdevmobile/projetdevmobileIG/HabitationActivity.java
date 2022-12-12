@@ -4,19 +4,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 
 import com.example.projetdevmobile.R;
+import com.example.projetdevmobile.projetdevmobile.Access;
 import com.example.projetdevmobile.projetdevmobile.Habitation;
 import com.example.projetdevmobile.projetdevmobile.HabitationManager;
+import com.example.projetdevmobile.projetdevmobile.ObjectRecycler;
+import com.example.projetdevmobile.projetdevmobile.Photo;
+import com.example.projetdevmobile.projetdevmobile.Room;
+
+import java.util.ArrayList;
 
 public class HabitationActivity extends AppCompatActivity {
 
@@ -24,6 +34,10 @@ public class HabitationActivity extends AppCompatActivity {
     private RecyclerView recyclerRoom;
     private Habitation habitation;
     private EditText habNameText;
+    private Button defineEntrance;
+
+    private int selectedRoom;
+    ArrayList<String> roomsName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +46,12 @@ public class HabitationActivity extends AppCompatActivity {
 
         habNameText = (EditText) findViewById(R.id.habitationName);
         recyclerRoom = (RecyclerView) findViewById(R.id.recyclerRoom);
+        defineEntrance = (Button)findViewById(R.id.buttonDefineEntrance);
+        defineEntrance.setEnabled(false);
         manager = HabitationManager.getInstance();
+
+        roomsName = new ArrayList<>();
+        selectedRoom = 0;
 
         Intent myIntent = getIntent();
         Boolean isCreation = myIntent.getBooleanExtra("isCreation", false);
@@ -55,6 +74,49 @@ public class HabitationActivity extends AppCompatActivity {
         intent.putExtra("isCreation", true);
         intent.putExtra("ObjectRecyclerParentName", habitation.getName());
         startActivity(intent);
+    }
+
+    public void disableButtonEntrance(){
+        if(habitation.getRooms().size() == 0)
+             defineEntrance.setEnabled(false);
+    }
+
+    public void defineEntrance(android.view.View v){
+        AlertDialog.Builder builder = new AlertDialog.Builder(HabitationActivity.this);
+        builder.setTitle("Choisissez la pièce d'entrée");
+        roomsName.clear();
+        for (ObjectRecycler r : habitation.getRooms()) {
+            roomsName.add(r.getName());
+        }
+
+        int checkedItem = 0;
+
+        if(habitation.getRoomEntrance() != null) {
+            checkedItem = roomsName.indexOf(habitation.getRoomEntrance().getName().toString());
+        }
+        builder.setSingleChoiceItems(roomsName.toArray(new String[roomsName.size()]), checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedRoom = which;
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                habitation.setRoomEntrance((Room)habitation.getRoom(roomsName.get(selectedRoom)));
+                displayRooms();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -121,6 +183,10 @@ public class HabitationActivity extends AppCompatActivity {
     private void displayRooms(){
         recyclerRoom.setAdapter(new ObjectRecyclerAdapter(HabitationActivity.this, habitation.getRooms()));
         recyclerRoom.setLayoutManager(new LinearLayoutManager(HabitationActivity.this));
+        if(habitation.getRooms().size() > 0)
+            defineEntrance.setEnabled(true);
+        else
+            defineEntrance.setEnabled(false);
     }
 
     private void hideKeyboard(View v){

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class Habitation implements ObjectRecycler {
     private String name;
     private ArrayList<ObjectRecycler> rooms;
+    private Room roomEntrance;
 
     public Habitation(String name){
         rooms = new ArrayList<ObjectRecycler>();
         this.name = name;
+        this.roomEntrance = null;
     }
 
     @Override
@@ -24,8 +26,8 @@ public class Habitation implements ObjectRecycler {
         return ObjectType.HABITATION;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Room getRoomEntrance() {
+        return roomEntrance;
     }
 
     public int getNbRooms(){
@@ -42,8 +44,19 @@ public class Habitation implements ObjectRecycler {
         return null;
     }
 
+    public void setRoomEntrance(Room roomEntrance) {
+        this.roomEntrance = roomEntrance;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        for(ObjectRecycler r : rooms){
+            ((Room)r).setHabitationName(this.name);
+        }
+    }
+
     public Room addRoom(String name){
-        Room room = new Room(name, this);
+        Room room = new Room(name, this.name);
         this.rooms.add(room);
         return room;
     }

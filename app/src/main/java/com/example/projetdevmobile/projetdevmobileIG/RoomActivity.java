@@ -105,11 +105,6 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         Boolean isCreation = myIntent.getBooleanExtra("isCreation", true);
 
 
-        /*
-        intent.putExtra("ObjectRecyclerName", resultDialogText);
-
-        */
-
         if(!isCreation) {
             unFocusAndDisplay(myIntent);
         }
@@ -143,7 +138,7 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
-        room = new Room(getResources().getString(R.string.room), habitation);
+        room = new Room(getResources().getString(R.string.room), habitation.getName());
         if(!habitation.availiableRoomName(room, getResources().getString(R.string.room)))
         {
             int i=1;
@@ -366,10 +361,5 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener((SensorEventListener) this);
-        Matrix replace = new Matrix();
-        imgSouth.setImageMatrix(replace);
-        imgNorth.setImageMatrix(replace);
-        imgWest.setImageMatrix(replace);
-        imgEast.setImageMatrix(replace);
     }
 }

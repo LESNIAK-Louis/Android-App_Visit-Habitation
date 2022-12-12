@@ -82,8 +82,6 @@ public class SelectActivity extends AppCompatActivity {
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bm = photo.getImageBitmap(this);
         imageView.setImageBitmap(bm);
-        //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(bm.getWidth(), bm.getHeight());
-        //imageView.setLayoutParams(layoutParams);
 
         listenerImageView = new OnTouchEvent();
         imageView.setOnTouchListener(listenerImageView);

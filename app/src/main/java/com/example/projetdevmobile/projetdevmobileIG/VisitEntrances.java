@@ -23,14 +23,14 @@ import com.example.projetdevmobile.projetdevmobile.Access;
 
 import java.util.ArrayList;
 
-public class SelectionRectangle extends SurfaceView {
+public class VisitEntrances extends SurfaceView {
 
     private Paint paint;
-    private ArrayList<Rect> selectedRects;
-    private Rect rect;
+    private ArrayList<Access> accesses;
     private ImageView viewOfImage;
+    private static int textSize = 52;
 
-    public SelectionRectangle(Context context, AttributeSet attrs) {
+    public VisitEntrances(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.getHolder().setFormat(PixelFormat.TRANSPARENT);
         this.setZOrderOnTop(true);
@@ -41,6 +41,7 @@ public class SelectionRectangle extends SurfaceView {
         this.paint.setStrokeWidth(5);
         this.paint.setColor(Color.BLACK);
         this.paint.setStyle(Paint.Style.STROKE);
+        this.paint.setTextSize(textSize);
     }
 
     public void configSurfaceView(ImageView viewOfImage){
@@ -52,34 +53,29 @@ public class SelectionRectangle extends SurfaceView {
         this.setLayoutParams(layoutParams);
     }
 
-    public Rect saveSelected(){
-        return rect;
-    }
 
-    public void setRect(Rect rect){
-        this.rect = rect;
-    }
-
-    public void setSelectedRects(ArrayList<Rect> rects){
-        this.selectedRects = rects;
+    public void setEntrances(ArrayList<Access> accesses){
+        this.accesses = accesses;
+        invalidate();
     }
 
     @Override
     public void onDraw(Canvas canvas){
         super.onDraw(canvas);
 
-        if(selectedRects != null){
-            paint.setColor(Color.RED);
-            for(Rect r : selectedRects) {
-                if(r != null)
-                    canvas.drawRect(r, paint);
+        if(accesses != null){
+            for(Access a : accesses) {
+                if(a != null){
+                    Rect rect = a.getRect();
+                    paint.setColor(Color.RED);
+                    canvas.drawRect(rect, paint);
+
+                    paint.setColor(Color.GREEN);
+                    canvas.drawText(a.getRoom().getName(),rect.left + (rect.right - rect.left)/2 - textSize/2 ,rect.top + (rect.bottom - rect.top)/2 - textSize/2, paint);
                 }
             }
-
-        if(rect != null) {
-            paint.setColor(Color.BLACK);
-            canvas.drawRect(rect, paint);
         }
+
 
         this.bringToFront();
     }

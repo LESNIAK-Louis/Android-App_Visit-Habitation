@@ -24,4 +24,5 @@
     <string name="room">Room</string>
     <string name="habitation">Habitation</string>
     <string name="error">Error</string>
+    <string name="defineEntrance">Define the entrance</string>
 </resources>
