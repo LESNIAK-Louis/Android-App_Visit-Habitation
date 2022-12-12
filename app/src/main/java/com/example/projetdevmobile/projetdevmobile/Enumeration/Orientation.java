@@ -47,6 +47,20 @@ public enum Orientation{
         return NORTH;
     }
 
+    public static Orientation getOrientation(String o){
+        Orientation orientation;
+        if(o.contentEquals("North"))
+            orientation = Orientation.NORTH;
+        else if (o.contentEquals("South"))
+            orientation = Orientation.SOUTH;
+        else if (o.contentEquals("West"))
+            orientation = Orientation.WEST;
+        else
+            orientation = Orientation.EAST;
+
+        return orientation;
+    }
+
     public String toString()
     {
         return this.nom;

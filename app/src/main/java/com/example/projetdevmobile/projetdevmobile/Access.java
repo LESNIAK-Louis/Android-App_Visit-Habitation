@@ -2,6 +2,9 @@ package com.example.projetdevmobile.projetdevmobile;
 
 import android.graphics.Rect;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Access {
     private Room room;
     private Rect rect;
@@ -22,5 +25,16 @@ public class Access {
 
     public boolean equals(Access a){
         return this.rect.toString().contentEquals(a.rect.toString());
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("room", this.room.getName());
+        jsonObject.put("rectL", this.getRect().left);
+        jsonObject.put("rectR", this.getRect().right);
+        jsonObject.put("rectT", this.getRect().top);
+        jsonObject.put("rectB", this.getRect().bottom);
+
+        return jsonObject;
     }
 }

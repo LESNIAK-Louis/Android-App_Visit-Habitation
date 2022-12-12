@@ -3,19 +3,21 @@ import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
 import com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation;
 import com.example.projetdevmobile.tools.IdMaker;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 public class Room implements ObjectRecycler {
     private HashMap<Orientation, Photo> photos;
     private String  habitationName;
     private String name;
-    private boolean start;
 
     public Room(String name, String habitationName){
         this.name = name;
         this.habitationName = habitationName;
         photos = new HashMap<>();
-        start = false;
     }
 
     @Override
@@ -26,10 +28,6 @@ public class Room implements ObjectRecycler {
     @Override
     public ObjectType getType() {
         return ObjectType.ROOM;
-    }
-
-    public boolean isStart() {
-        return start;
     }
 
     public Photo getPhoto(Orientation o) {
@@ -45,10 +43,6 @@ public class Room implements ObjectRecycler {
 
     public HashMap<Orientation, Photo> getPhotos() {
         return photos;
-    }
-
-    public void setStart(boolean start) {
-        this.start = start;
     }
 
     public void setName(String name){
@@ -77,5 +71,20 @@ public class Room implements ObjectRecycler {
                 return true;
         }
         return false;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", this.getName());
+
+        jsonObject.put("nbPhotos", photos.values().size());
+
+        JSONArray jsonArrayPhoto = new JSONArray();
+        for(Photo photo : photos.values()){
+            jsonArrayPhoto.put(photo.toJson());
+        }
+        jsonObject.put("photos", jsonArrayPhoto);
+
+        return jsonObject;
     }
 }

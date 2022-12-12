@@ -24,4 +24,25 @@
     <string name="habitation">Habitation</string>
     <string name="error">Erreur</string>
     <string name="defineEntrance">Définir l\'entrée</string>
+    <string name="save">Sauvegarder</string>
+    <string name="pause">Explication</string>
+    <string name="quit">Quitter</string>
+    <string name="welcome">Bienvenue !</string>
+    <string name="goHome">Aller à la page des habitations !</string>
+    <string name="warningWelcome">Ceci est affiché lorsque votre habitation/pièce n\'est pas terminée, vous devez la terminer avant de pouvoir visiter.</string>
+    <string name="startWelcome">Cliquez dessus pour visiter une habitation.</string>
+    <string name="entranceWelcome">Ceci est affiché à côté de votre pièce d\'entrée.</string>
+    <string name="trashWelcome">Cliquez dessus pour supprimer l\'habitation/pièce.</string>
+    <string name="onVisit">Lors d\'une visite, swipez pour changer l\'orientation.</string>
+    <string name="onSelect">Pincer l\'écran pour créer un accès dans le mode de sélection.</string>
+    <string name="selectionMode">Touchez une photo déjà prise pour entrer dans le mode de sélection.</string>
+    <string name="cancel">Annuler</string>
+    <string name="ok">Ok</string>
+    <string name="modify">Modifier</string>
+    <string name="delete">Supprimer</string>
+    <string name="choose_room">Choisissez une pièce où mène l\'accès</string>
+    <string name="entry_room">Choisissez la pièce d\'entrée</string>
+    <string name="already_taken">Ce nom est déjà pris</string>
+    <string name="doAction">Faites une action</string>
+    <string name="retakePicture">Reprendre la photo</string>
 </resources>

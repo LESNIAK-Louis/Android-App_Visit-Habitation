@@ -1,5 +1,7 @@
 package com.example.projetdevmobile.projetdevmobileIG;
 
+import static com.example.projetdevmobile.tools.Static.saveJson;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -202,6 +204,7 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         sensorManager.registerListener((SensorEventListener) this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener((SensorEventListener) this, sensorMagneto, SensorManager.SENSOR_DELAY_NORMAL);
         displayPictures();
+        saveJson(this);
     }
 
     /* PICTURES */
@@ -232,9 +235,9 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         }
         else{
             AlertDialog.Builder builder = new AlertDialog.Builder(RoomActivity.this);
-            builder.setTitle("Faites une action");
+            builder.setTitle(getResources().getString(R.string.doAction));
 
-            builder.setPositiveButton("Modifier", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(RoomActivity.this, SelectActivity.class);
@@ -244,14 +247,14 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
                     startActivity(intent);
                 }
             });
-            builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
                 }
             });
 
-            builder.setNegativeButton("Reprendre photo", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getResources().getString(R.string.retakePicture), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     takePicture();
@@ -312,6 +315,12 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
+        Photo currPhoto = room.getPhoto(lastPictureOrientation);
+        if (currPhoto != null)
+        {
+            Uri uri = Uri.parse(currPhoto.getImage());
+            getContentResolver().delete(uri, null, null);
+        }
 
         Uri cloned = Uri.parse(currPicturePath.toString());
         room.setPhoto(new Photo(lastPictureOrientation, cloned));
@@ -333,6 +342,7 @@ public class RoomActivity extends AppCompatActivity implements SensorEventListen
             default:
                 break;
         }
+        saveJson(this);
     }
 
     /* Compass */

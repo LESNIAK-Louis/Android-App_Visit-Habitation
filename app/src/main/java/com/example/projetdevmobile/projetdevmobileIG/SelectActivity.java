@@ -2,6 +2,9 @@ package com.example.projetdevmobile.projetdevmobileIG;
 
 import static android.graphics.Rect.intersects;
 
+import static com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation.getOrientation;
+import static com.example.projetdevmobile.tools.Static.saveJson;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -87,19 +90,6 @@ public class SelectActivity extends AppCompatActivity {
         imageView.setOnTouchListener(listenerImageView);
     }
 
-    private Orientation getOrientation(String o){
-        Orientation orientation;
-        if(o.contentEquals("North"))
-            orientation = Orientation.NORTH;
-        else if (o.contentEquals("South"))
-            orientation = Orientation.SOUTH;
-        else if (o.contentEquals("West"))
-            orientation = Orientation.WEST;
-        else
-            orientation = Orientation.EAST;
-
-        return orientation;
-    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus){
@@ -143,7 +133,7 @@ public class SelectActivity extends AppCompatActivity {
 
     private void modifyAccess(Access a, Rect rect){
         AlertDialog.Builder builder = new AlertDialog.Builder(SelectActivity.this);
-        builder.setTitle("Choisissez la pièce où mène la porte");
+        builder.setTitle(getResources().getString(R.string.choose_room));
         roomsName.clear();
         for (ObjectRecycler r : habitation.getRooms()) {
             if(!room.getName().contentEquals(r.getName()))
@@ -182,7 +172,7 @@ public class SelectActivity extends AppCompatActivity {
             }
         });
         if(a != null && rect == null) {
-            builder.setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     selectedRects.remove(a.getRect());
@@ -193,7 +183,7 @@ public class SelectActivity extends AppCompatActivity {
             });
         }
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 selectionRectangle.setRect(null);
@@ -256,5 +246,11 @@ public class SelectActivity extends AppCompatActivity {
             }
             return false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        saveJson(this);
     }
 }

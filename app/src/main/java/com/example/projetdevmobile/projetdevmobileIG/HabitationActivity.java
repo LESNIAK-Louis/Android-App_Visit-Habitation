@@ -1,5 +1,7 @@
 package com.example.projetdevmobile.projetdevmobileIG;
 
+import static com.example.projetdevmobile.tools.Static.saveJson;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -83,7 +85,7 @@ public class HabitationActivity extends AppCompatActivity {
 
     public void defineEntrance(android.view.View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(HabitationActivity.this);
-        builder.setTitle("Choisissez la pièce d'entrée");
+        builder.setTitle(getResources().getString(R.string.entry_room));
         roomsName.clear();
         for (ObjectRecycler r : habitation.getRooms()) {
             roomsName.add(r.getName());
@@ -100,14 +102,14 @@ public class HabitationActivity extends AppCompatActivity {
                 selectedRoom = which;
             }
         });
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 habitation.setRoomEntrance((Room)habitation.getRoom(roomsName.get(selectedRoom)));
                 displayRooms();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -123,6 +125,7 @@ public class HabitationActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         displayRooms();
+        saveJson(this);
     }
 
     private void unFocusAndDisplay(Intent myIntent){
@@ -166,7 +169,7 @@ public class HabitationActivity extends AppCompatActivity {
 
                     if(habName.contentEquals("") || !manager.availiableName(habitation, habName))
                     {
-                        Toast.makeText(HabitationActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HabitationActivity.this, getResources().getString(R.string.entry_room), Toast.LENGTH_SHORT).show();
                         habNameText.setText(habitation.getName());
                     }
                     else{

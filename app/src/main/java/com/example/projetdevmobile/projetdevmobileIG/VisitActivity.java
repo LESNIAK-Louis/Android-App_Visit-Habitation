@@ -2,6 +2,8 @@ package com.example.projetdevmobile.projetdevmobileIG;
 
 import static android.graphics.Rect.intersects;
 
+import static com.example.projetdevmobile.tools.Static.saveJson;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -142,5 +144,11 @@ public class VisitActivity extends AppCompatActivity {
             }
             return true;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        saveJson(this);
     }
 }

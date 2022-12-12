@@ -3,6 +3,10 @@ package com.example.projetdevmobile.projetdevmobile;
 import com.example.projetdevmobile.projetdevmobile.Enumeration.ObjectType;
 import com.example.projetdevmobile.projetdevmobile.Enumeration.Orientation;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Habitation implements ObjectRecycler {
@@ -85,5 +89,25 @@ public class Habitation implements ObjectRecycler {
                 return false;
         }
         return true;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", this.getName());
+        jsonObject.put("nbRooms", rooms.size());
+
+        JSONArray jsonArrayRoom = new JSONArray();
+        for(ObjectRecycler room : rooms){
+            jsonArrayRoom.put(((Room)room).toJson());
+        }
+
+        jsonObject.put("rooms", jsonArrayRoom);
+
+        if(this.roomEntrance != null)
+            jsonObject.put("roomEntrance", this.roomEntrance.getName());
+        else
+            jsonObject.put("roomEntrance", "null");
+
+        return jsonObject;
     }
 }

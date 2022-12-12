@@ -1,6 +1,8 @@
 package com.example.projetdevmobile.projetdevmobileIG;
 
 
+import static com.example.projetdevmobile.tools.Static.saveJson;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,6 +29,7 @@ import com.example.projetdevmobile.projetdevmobile.ObjectRecycler;
 import com.example.projetdevmobile.projetdevmobile.Photo;
 import com.example.projetdevmobile.projetdevmobile.Room;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -79,10 +82,10 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
             Habitation hab = ((Habitation) object);
 
             holder.image1.setImageResource(R.drawable.hab);
-            if(!hab.isCorrect()){
+            if(!hab.isCorrect() || hab.getRoomEntrance() == null){
                 holder.image2.setImageResource(R.drawable.warning);
             }
-            else if (hab.getRoomEntrance() != null){
+            else{
                 holder.image2.setImageResource(R.drawable.play);
                 holder.image2.setOnClickListener(l->{
                     Intent intent = new Intent(inflater.getContext(), VisitActivity.class);
@@ -118,53 +121,30 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
 
     private void alertDeletion(ObjectRecycler object){
         AlertDialog.Builder builder = new AlertDialog.Builder(inflater.getContext());
-        builder.setTitle("Voulez vous vraiment supprimer " + object.getName() + " ?");
+        builder.setTitle(inflater.getContext().getResources().getString(R.string.delete) + object.getName() + " ?");
 
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(inflater.getContext().getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              if(object.getType().equals(ObjectType.ROOM)){
-                  HabitationManager hm = HabitationManager.getInstance();
-                  Habitation hab = hm.getHabitation(((Room)object).getHabitationName());
-
-                  Room r = hab.getRoomEntrance();
-                  if(r != null && hab.getRoomEntrance().getName().contentEquals(((Room)object).getName()))
-                      hab.setRoomEntrance(null);
-
-                  // Deletion of all accesses assiociated
-                  Executors.newSingleThreadExecutor().execute(new Runnable() {
-                      public void run() {
-                          for(ObjectRecycler object_hab : hab.getRooms()){
-                              Room room = (Room)object_hab;
-                              for(Photo photo : room.getPhotos().values()){
-                                  ArrayList<Access> accessesToDel = new ArrayList<>();
-                                  for(Access a : photo.getAccess())
-                                  {
-                                      if(a.getRoom().getName().contentEquals(((Room)object).getName()))
-                                          accessesToDel.add(a);
-                                  }
-                                  for(Access aToDel : accessesToDel)
-                                  {
-                                      photo.removeAccess(aToDel);
-                                  }
-                              }
-                          }
-                      }
-                  });
-
-                  hab.removeRoom((Room)object);
-                  notifyDataSetChanged();
-
-                  HabitationActivity habAct = ((HabitationActivity)(inflater.getContext()));
-                  habAct.disableButtonEntrance();
+                if(object.getType().equals(ObjectType.ROOM)){
+                    deleteRoom(object);
+                    HabitationActivity habAct = ((HabitationActivity)(inflater.getContext()));
+                    habAct.disableButtonEntrance();
+                    notifyDataSetChanged();
               }else{
                   HabitationManager hm = HabitationManager.getInstance();
+                  for(ObjectRecycler room : hm.getHabitation(object.getName()).getRooms())
+                  {
+                      deleteRoom(room);
+                  }
                   hm.removeHabitation(((Habitation)object));
+                  saveJson(inflater.getContext());
+
                   notifyDataSetChanged();
               }
             }
         });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(inflater.getContext().getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -174,6 +154,44 @@ public class ObjectRecyclerAdapter extends RecyclerView.Adapter<ObjectRecyclerAd
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void deleteRoom(ObjectRecycler object){
+        HabitationManager hm = HabitationManager.getInstance();
+        Habitation hab = hm.getHabitation(((Room)object).getHabitationName());
+
+        Room r = hab.getRoomEntrance();
+        if(r != null && hab.getRoomEntrance().getName().contentEquals(((Room)object).getName()))
+            hab.setRoomEntrance(null);
+
+        // Deletion of all accesses and pictures assiociated
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            public void run() {
+                for(ObjectRecycler object_hab : hab.getRooms()){
+                    Room room = (Room)object_hab;
+                    for(Photo photo : room.getPhotos().values()){
+                        ArrayList<Access> accessesToDel = new ArrayList<>();
+                        for(Access a : photo.getAccess())
+                        {
+                            if(a.getRoom().getName().contentEquals(((Room)object).getName()))
+                                accessesToDel.add(a);
+                        }
+                        for(Access aToDel : accessesToDel)
+                        {
+                            photo.removeAccess(aToDel);
+                        }
+                    }
+                }
+
+                Room room = (Room)object;
+                for(Photo photo : room.getPhotos().values()){
+                    Uri uri = Uri.parse(photo.getImage());
+                    inflater.getContext().getContentResolver().delete(uri, null, null);
+                }
+                hab.removeRoom(room);
+                saveJson(inflater.getContext());
+            }
+        });
     }
 
     @Override

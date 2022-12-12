@@ -25,4 +25,25 @@
     <string name="habitation">Habitation</string>
     <string name="error">Error</string>
     <string name="defineEntrance">Define the entrance</string>
+    <string name="save">Save</string>
+    <string name="pause">Explanation</string>
+    <string name="quit">Quit</string>
+    <string name="welcome">Welcome !</string>
+    <string name="goHome">Go to habitations page !</string>
+    <string name="warningWelcome">This is displayed when your habitation/room is not finished, you need to finish it in order to visit.</string>
+    <string name="startWelcome">Click on it to visit the habitation.</string>
+    <string name="entranceWelcome">This is displayed next to your entrance room.</string>
+    <string name="trashWelcome">Click on it to delete your habitation/room.</string>
+    <string name="onVisit">When visiting, swipe to change the orientation.</string>
+    <string name="onSelect">Pinch to create an access in selection mode.</string>
+    <string name="selectionMode">Tap on taken picture to enter in the Selection Mode.</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="modify">Modify</string>
+    <string name="delete">Delete</string>
+    <string name="choose_room">Choose a room where to go with this access</string>
+    <string name="entry_room">Choose the entry room</string>
+    <string name="already_taken">This name is already taken</string>
+    <string name="doAction">Do an action</string>
+    <string name="retakePicture">Retake Picture</string>
 </resources>
