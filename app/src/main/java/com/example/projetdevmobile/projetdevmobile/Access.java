@@ -58,7 +58,11 @@ public class Access {
      */
     public JSONObject toJson() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("room", this.room.getName());
+        if(room != null)
+            jsonObject.put("room", this.room.getName());
+        else
+            jsonObject.put("room", "null");
+
         jsonObject.put("rectL", this.getRect().left);
         jsonObject.put("rectR", this.getRect().right);
         jsonObject.put("rectT", this.getRect().top);

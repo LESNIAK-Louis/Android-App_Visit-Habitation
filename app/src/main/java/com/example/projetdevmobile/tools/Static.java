@@ -136,10 +136,14 @@ public class Static {
                                 for (int j = 0; j < arrayAccess.length(); j++) {
                                     JSONObject jsonAccess = (JSONObject) arrayAccess.get(j);
 
-                                    Room room = (Room) habitation.getRoom((String) jsonAccess.get("room"));
-                                    Rect rect = new Rect((int) jsonAccess.get("rectL"), (int) jsonAccess.get("rectT"), (int) jsonAccess.get("rectR"), (int) jsonAccess.get("rectB"));
-                                    Access access = new Access(room, rect);
-                                    photo.addAccess(access);
+                                    String res =  jsonAccess.getString("room");
+                                    if(res != "null") {
+                                        Room room = (Room) habitation.getRoom(res);
+
+                                        Rect rect = new Rect((int) jsonAccess.get("rectL"), (int) jsonAccess.get("rectT"), (int) jsonAccess.get("rectR"), (int) jsonAccess.get("rectB"));
+                                        Access access = new Access(room, rect);
+                                        photo.addAccess(access);
+                                    }
                                 }
                             }
 
