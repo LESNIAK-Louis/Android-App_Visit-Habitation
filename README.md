@@ -13,7 +13,7 @@ To map your habitation, you must :
 
 Once you have mapped your habitation, you can visit it by sliding the pictures and clicking the doors.
 
-## Availiable languages 
+## Available languages 
 
 - French
 - English
